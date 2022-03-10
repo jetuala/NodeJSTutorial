@@ -1,28 +1,16 @@
-const { readFile, writeFile } = require('fs');
-// asynchronous version
-// need to provide callback, similar to click event in html
+const http = require('http');
 
-readFile('./content/first.txt', 'utf8', (err, result) => {
-    if (err) {
-        console.log(err);
-        return;
+const server = http.createServer((req, res) => {
+    if (req.url === '/') {
+        res.end('Hello! Welcome to our home page.')
     }
-    const firstTxt = result;
-    readFile('./content/second.txt', 'utf8', (err, result) => {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        const secondTxt = result;
-        writeFile(
-            './content/result-async.txt',
-            `Here is the result : ${firstTxt}, ${secondTxt}`
-        , (err, result) => {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            console.log(result)
-        })
-    })
+    if (req.url === '/about') {
+        res.end('Hello! Here is our history.')
+    }
+    res.end(`
+    <h1>Oops!</h1>
+    <p>We can't seem to find that page here.</p>
+    <a href="/">Back home</a>`);
 })
+
+server.listen(5000)
